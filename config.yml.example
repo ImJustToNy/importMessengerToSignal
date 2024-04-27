@@ -1,0 +1,12 @@
+entrypoint: "./"
+people:
+  - signal_number: "+1234567890"
+    facebook_id: "1234567890"
+
+conversations:
+  - type: "group"
+    facebook_id: "123123123"
+    signal_id: "123123123"
+  - type: "direct"
+    facebook_id: "123123123"
+    signal_id: "+1234567890"
