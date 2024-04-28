@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"slices"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -70,6 +72,8 @@ func ProcessMessageFile(content []byte, conversation *Conversation) {
 		log.Fatalf("Couldn't parse json file: %v", err)
 	}
 
+	slices.Reverse(data.Messages)
+
 	for _, message := range data.Messages {
 		message.SenderName = FixEncoding(message.SenderName)
 		message.Content = FixEncoding(message.Content)
@@ -79,7 +83,7 @@ func ProcessMessageFile(content []byte, conversation *Conversation) {
 		person := getPersonByFacebookID(message.SenderName)
 
 		if person == nil {
-			//log.Printf("Couldn't find person with facebook id %s", message.SenderName)
+			log.Printf("Couldn't find person with facebook id %s", message.SenderName)
 			continue
 		}
 
@@ -118,6 +122,9 @@ func FixEncoding(s string) string {
 func SendMessage(conversation Conversation, person Person, message Message) {
 	attachments := make([]string, 0)
 
+	var content strings.Builder
+	content.WriteString(message.Content)
+
 	for _, photo := range message.Photos {
 		attachments = append(attachments, photo.URI)
 	}
@@ -134,8 +141,10 @@ func SendMessage(conversation Conversation, person Person, message Message) {
 		attachments = append(attachments, audioFile.URI)
 	}
 
-	if len(attachments) > 0 {
-		//log.Printf("Sending message with %d attachments", len(attachments))
-		SendMessageToSignal(person.SignalNumber, conversation.SignalID, message.Content, attachments)
+	if message.Share.Link != "" {
+		content.WriteString(" ")
+		content.WriteString(message.Share.Link)
 	}
+
+	SendMessageToSignal(person.SignalNumber, conversation.SignalID, message.TimestampMs, content.String(), attachments)
 }

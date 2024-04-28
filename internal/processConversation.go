@@ -10,7 +10,9 @@ import (
 func ProcessConversation(conversation *Conversation) {
 	log.Printf("Processing conversation %s", conversation.FacebookID)
 
-	directory, err := filepath.Abs(filepath.Join(GetConfig().Entrypoint, "your_activity_across_facebook/messages/inbox", conversation.FacebookID))
+	directory, err := filepath.Abs(filepath.Join(GetConfig().Entrypoint, "your_facebook_activity/messages/inbox", conversation.FacebookID))
+	log.Printf("Processing directory: %s", directory)
+
 	if err != nil {
 		log.Fatalf("Couldn't process directory name of %s/%s", GetConfig().Entrypoint, conversation.FacebookID)
 	}

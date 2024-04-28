@@ -1,11 +1,13 @@
 package internal
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"syscall"
+	"time"
 )
 
 const SignalCliBinary = "./signal-cli"
@@ -16,7 +18,7 @@ func EnsureSignalCliBinary() {
 	}
 }
 
-func SendMessageToSignal(from string, to string, message string, attachments []string) {
+func SendMessageToSignal(from string, to string, timestamp int64, message string, attachments []string) {
 	args := []string{"--dbus", "-u", from, "send", "-g", to}
 
 	if len(attachments) > 0 {
@@ -25,9 +27,7 @@ func SendMessageToSignal(from string, to string, message string, attachments []s
 		}
 	}
 
-	if message != "" {
-		args = append(args, "-m", message)
-	}
+	args = append(args, "-m", fmt.Sprintf("[%s] %s", time.UnixMilli(timestamp).Format(time.DateTime), message))
 
 	cmd := exec.Command(SignalCliBinary, args...)
 	output, err := cmd.CombinedOutput()
