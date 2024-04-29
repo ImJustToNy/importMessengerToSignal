@@ -10,3 +10,5 @@ conversations:
     type: "group"
     signal_id: "foobar"
     resume_from_timestamp: 0
+
+restart_dbus_every: 1000

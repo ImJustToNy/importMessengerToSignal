@@ -12,6 +12,9 @@ import (
 
 const SignalCliBinary = "./signal-cli"
 
+var dbusInstance *exec.Cmd
+var sendMessagesOnCurrentDBusInstance = 0
+
 func EnsureSignalCliBinary() {
 	if _, err := os.Stat(SignalCliBinary); os.IsNotExist(err) {
 		log.Fatalln("signal-cli binary not found, please download it from https://github.com/AsamK/signal-cli/releases/latest and place it in the current directory named signal-cli")
@@ -36,27 +39,45 @@ func SendMessageToSignal(from string, to string, timestamp int64, message string
 	}
 }
 
-func StartDbus() *exec.Cmd {
+func StartDbus() {
 	cmd := exec.Command(SignalCliBinary, "daemon", "--dbus", "--receive-mode", "manual")
 	err := cmd.Start()
 
 	if err != nil {
-		log.Fatalf("Couldn't start dbus: %v", err)
+		log.Fatalf("Couldn't start DBus: %v", err)
 	}
 
-	log.Printf("Started dbus with pid %d", cmd.Process.Pid)
+	log.Printf("Started DBus with pid %d", cmd.Process.Pid)
 
-	return cmd
+	dbusInstance = cmd
+
+	time.Sleep(10 * time.Second) // wait for dbus to boot up
 }
 
-func StopDbus(dbus *exec.Cmd) {
-	if err := dbus.Process.Signal(syscall.SIGTERM); err != nil {
+func StopDbus() {
+	if err := dbusInstance.Process.Signal(syscall.SIGTERM); err != nil {
 		log.Printf("Failed to stop DBus: %v", err)
 	}
 
-	if _, err := dbus.Process.Wait(); err != nil {
+	if _, err := dbusInstance.Process.Wait(); err != nil {
 		log.Printf("Failed to wait for DBus to stop: %v", err)
 	}
 
 	log.Println("DBus has been stopped.")
+
+	dbusInstance = nil
+	sendMessagesOnCurrentDBusInstance = 0
+}
+
+func RestartDbus() {
+	log.Println("Restarting DBus")
+	StopDbus()
+	StartDbus()
+}
+
+func IncreaseSendMessagesOnCurrentDBusInstance() {
+	sendMessagesOnCurrentDBusInstance++
+	if sendMessagesOnCurrentDBusInstance >= GetConfig().RestartDbusEvery {
+		RestartDbus()
+	}
 }

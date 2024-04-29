@@ -19,9 +19,10 @@ type Person struct {
 }
 
 type Config struct {
-	Entrypoint    string         `yaml:"entrypoint"`
-	People        []Person       `yaml:"people"`
-	Conversations []Conversation `yaml:"conversations"`
+	Entrypoint       string         `yaml:"entrypoint"`
+	People           []Person       `yaml:"people"`
+	Conversations    []Conversation `yaml:"conversations"`
+	RestartDbusEvery int            `yaml:"restart_dbus_every"`
 }
 
 var LoadedConfig *Config

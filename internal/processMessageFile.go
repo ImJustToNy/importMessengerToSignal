@@ -89,6 +89,7 @@ func ProcessMessageFile(content []byte, conversation *Conversation) {
 			continue
 		}
 
+		IncreaseSendMessagesOnCurrentDBusInstance()
 		SendMessage(*conversation, *person, message)
 	}
 }

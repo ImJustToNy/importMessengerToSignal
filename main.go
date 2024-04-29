@@ -6,16 +6,13 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 func main() {
 	internal.EnsureSignalCliBinary()
-	dbus := internal.StartDbus()
+	internal.StartDbus()
 
-	time.Sleep(10 * time.Second) // wait for dbus to start
-
-	defer internal.StopDbus(dbus)
+	defer internal.StopDbus()
 
 	go func() {
 		for _, conversation := range internal.GetConfig().Conversations {
