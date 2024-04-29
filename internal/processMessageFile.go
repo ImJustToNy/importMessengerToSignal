@@ -143,6 +143,10 @@ func SendMessage(conversation Conversation, person Person, message Message) {
 		attachments = append(attachments, audioFile.URI)
 	}
 
+	if message.Sticker.URI != "" {
+		attachments = append(attachments, message.Sticker.URI)
+	}
+
 	if message.Share.Link != "" {
 		content.WriteString(" ")
 		content.WriteString(message.Share.Link)
