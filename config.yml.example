@@ -1,12 +1,12 @@
-entrypoint: "./"
+entrypoint: "."
 people:
-  - signal_number: "+1234567890"
-    facebook_id: "1234567890"
+  - signal_number: "+48123123123"
+    facebook_id: "John Doe"
+  - signal_number: "+48789789789"
+    facebook_id: "Adam Smith"
 
 conversations:
-  - type: "group"
-    facebook_id: "123123123"
-    signal_id: "123123123"
-  - type: "direct"
-    facebook_id: "123123123"
-    signal_id: "+1234567890"
+  - facebook_id: "asd_1675948962619089"
+    type: "group"
+    signal_id: "foobar"
+    resume_from_timestamp: 0
