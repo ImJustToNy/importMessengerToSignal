@@ -37,7 +37,7 @@ func SendMessageToSignal(from string, to string, timestamp int64, message string
 }
 
 func StartDbus() *exec.Cmd {
-	cmd := exec.Command(SignalCliBinary, "daemon", "--dbus")
+	cmd := exec.Command(SignalCliBinary, "daemon", "--dbus", "--receive-mode", "manual")
 	err := cmd.Start()
 
 	if err != nil {
