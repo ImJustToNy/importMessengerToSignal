@@ -7,9 +7,10 @@ import (
 )
 
 type Conversation struct {
-	Type       string `yaml:"type"`
-	FacebookID string `yaml:"facebook_id"`
-	SignalID   string `yaml:"signal_id"`
+	Type          string `yaml:"type"`
+	FacebookID    string `yaml:"facebook_id"`
+	SignalID      string `yaml:"signal_id"`
+	FromTimestamp int64  `yaml:"resume_from_timestamp"`
 }
 
 type Person struct {

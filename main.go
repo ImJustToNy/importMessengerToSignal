@@ -13,7 +13,7 @@ func main() {
 	internal.EnsureSignalCliBinary()
 	dbus := internal.StartDbus()
 
-	time.Sleep(2 * time.Second) // wait for dbus to start
+	time.Sleep(10 * time.Second) // wait for dbus to start
 
 	defer internal.StopDbus(dbus)
 

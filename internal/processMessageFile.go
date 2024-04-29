@@ -75,10 +75,12 @@ func ProcessMessageFile(content []byte, conversation *Conversation) {
 	slices.Reverse(data.Messages)
 
 	for _, message := range data.Messages {
+		if message.TimestampMs < conversation.FromTimestamp {
+			continue
+		}
+
 		message.SenderName = FixEncoding(message.SenderName)
 		message.Content = FixEncoding(message.Content)
-
-		//log.Printf("Processing message from %s: %s", message.SenderName, message.Content)
 
 		person := getPersonByFacebookID(message.SenderName)
 
