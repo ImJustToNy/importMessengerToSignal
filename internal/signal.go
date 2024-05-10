@@ -21,13 +21,17 @@ func EnsureSignalCliBinary() {
 	}
 }
 
-func SendMessageToSignal(from string, to string, timestamp int64, message string, attachments []string) {
-	args := []string{"--dbus", "-u", from, "send", "-g", to}
+func SendMessageToSignal(from string, to string, timestamp int64, message string, attachments []string, isGroup bool) {
+	args := []string{"--dbus", "-u", from, "send"}
 
-	if len(attachments) > 0 {
-		for _, attachment := range attachments {
-			args = append(args, "--attachment", filepath.Join(GetConfig().Entrypoint, attachment))
-		}
+	if isGroup {
+		args = append(args, "-g")
+	}
+
+	args = append(args, to)
+
+	for _, attachment := range attachments {
+		args = append(args, "--attachment", filepath.Join(GetConfig().Entrypoint, attachment))
 	}
 
 	args = append(args, "-m", fmt.Sprintf("[%s] %s", time.UnixMilli(timestamp).Format(time.DateTime), message))

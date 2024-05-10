@@ -153,5 +153,5 @@ func SendMessage(conversation Conversation, person Person, message Message) {
 		content.WriteString(message.Share.Link)
 	}
 
-	SendMessageToSignal(person.SignalNumber, conversation.SignalID, message.TimestampMs, content.String(), attachments)
+	SendMessageToSignal(person.SignalNumber, conversation.SignalID, message.TimestampMs, content.String(), attachments, conversation.IsGroup)
 }

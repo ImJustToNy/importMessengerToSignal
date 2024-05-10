@@ -1,4 +1,4 @@
-entrypoint: "."
+entrypoint: "." # path of extracted facebook data
 people:
   - signal_number: "+48123123123"
     facebook_id: "John Doe"
@@ -7,7 +7,7 @@ people:
 
 conversations:
   - facebook_id: "asd_1675948962619089"
-    type: "group"
+    is_group: true
     signal_id: "foobar"
     resume_from_timestamp: 0
 

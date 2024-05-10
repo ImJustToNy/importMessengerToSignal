@@ -7,9 +7,9 @@ import (
 )
 
 type Conversation struct {
-	Type          string `yaml:"type"`
 	FacebookID    string `yaml:"facebook_id"`
 	SignalID      string `yaml:"signal_id"`
+	IsGroup       bool   `yaml:"is_group"`
 	FromTimestamp int64  `yaml:"resume_from_timestamp"`
 }
 
